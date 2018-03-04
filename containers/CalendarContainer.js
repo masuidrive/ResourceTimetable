@@ -22,7 +22,7 @@ export default connect(
   }
   return (
     <div>
-      <Timetable resources={resources}/>
+      <Timetable resources={resources} width="100%" height="90vh" />
       <button onClick={() => unauthorize()}>Sign Out</button>
     </div>
   )

@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - run:
+          name: yarn install
+          command: yarn install
+      - run:
+          name: Deploy to gh-pages
+          command: |
+            git config --global push.default matching
+            git config --global user.email "circleci@masuidrive.jp"
+            git config --global user.name "CircleCI"
+            ./bin/deploy_to_gh.sh

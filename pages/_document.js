@@ -10,10 +10,10 @@ export default class MyDocument extends Document {
       <html>
         <Head>
           <title>Google Calendar Resources</title>
-          <script src="https://apis.google.com/js/api.js"></script>
         </Head>
         <body>
           <Main />
+          <script src="https://apis.google.com/js/api.js"></script>
           <NextScript />
         </body>
       </html>

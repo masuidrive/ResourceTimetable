@@ -4,7 +4,7 @@ services:
     build: .
     env_file: .env
     volumes:
-      - "./src:/usr/src/app"
+      - ".:/usr/src/app"
       - "/usr/src/app/node_modules"
     ports:
       - "3000:3000"
