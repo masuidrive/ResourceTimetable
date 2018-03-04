@@ -1,11 +1,8 @@
 import React from 'react'
-import Link from 'next/link';
-
 import { bindActionCreators } from 'redux'
 import { initStore, initialize, authorize, unauthorize } from '../store'
 import withRedux from 'next-redux-wrapper'
 
-import RoomTimeTable from '../components/RoomTimeTable'
 import SignInContainer from '../containers/SignInContainer'
 import CalendarContainer from '../containers/CalendarContainer'
 

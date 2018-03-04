@@ -3,6 +3,12 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { unauthorize } from '../store'
 
+import Timetable from '../components/Timetable'
+
+const hourHeight = 40
+const lineWidth = 100
+const headerHeight = 50
+
 export default connect(
   (state) => ({ // mapStateToPropsContainer
     resources: state.resources
@@ -10,15 +16,14 @@ export default connect(
   (dispatch) => ({ // mapDispatchToProps
     unauthorize: bindActionCreators(unauthorize, dispatch),
   })
-)(({resources, unauthorize}) => (
-  <div>
-    <h1>Goggle Calendar Resource Viewer</h1>
-    {
-      resources === undefined ? 'waiting...' : 
-      resources.map((resource) => (
-        <div>{resource.calendar.summary}</div>
-      ))
-    }
-    <button onClick={() => unauthorize()}>Sign Out</button>
-  </div>
-));
+)(({resources, unauthorize}) => {
+  if(resources === undefined) {
+    return (<div>waiting...</div>)
+  }
+  return (
+    <div>
+      <Timetable resources={resources}/>
+      <button onClick={() => unauthorize()}>Sign Out</button>
+    </div>
+  )
+});

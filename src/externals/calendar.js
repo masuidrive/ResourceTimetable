@@ -1,6 +1,9 @@
+import moment from 'moment-timezone';
 
 export class Calendar {
-  async resourceEvents() {
+  async resourceEvents(date) {
+    var date = moment(date)
+
     const gapi = window.gapi;
     return new Promise((resolve, reject) => {
       gapi.client.calendar.calendarList.list().then(
@@ -11,23 +14,34 @@ export class Calendar {
           for(let cal of response.result.items) {
             if(String(cal.id).match(/@resource\.calendar\.google\.com$/)) {
                 console.log(cal.summary, cal.timeZone, cal.id);
-                const batchId = batch.add(this.requestEventList(cal.id));
+                const batchId = batch.add(this.requestEventList(cal.id, date));
                 result[batchId] = {
-                  calendar: cal
+                  timeZone: cal.timeZone,
+                  name: cal.summary,
+                  id: cal.id
                 }
             }
           }
-
+          
           batch.then(
             (batchResponse) => {
-              console.log(batchResponse)
               for(let batchId in batchResponse.result) {
-                console.log(singleResponse)
                 let singleResponse = batchResponse.result[batchId]
                 result[batchId].events = []
                 for(let item of singleResponse.result.items) {
-                  console.log(item)
-                  result[batchId].events.push(item)
+                  if(typeof item.start.dateTime == "string") {
+                    const start = moment(item.start.dateTime).tz(result[batchId].timeZone)
+                    const end = moment(item.end.dateTime).tz(result[batchId].timeZone)
+                    if(date.startOf('day') <= end && start <= date.endOf('day')) {
+                      result[batchId].events.push({
+                        id: item.id,
+                        title: item.summary,
+                        url: item.htmlLink,
+                        start: start,
+                        end: end,
+                      })
+                    }
+                  }
                 }
               }
               resolve(Object.values(result));
@@ -58,11 +72,13 @@ export class Calendar {
   }  
 
 
-  requestEventList(calendarId) {
+  requestEventList(calendarId, date) {
     const gapi = window.gapi;
+
     return gapi.client.calendar.events.list({
       'calendarId': calendarId,
-      'timeMin': (new Date()).toISOString(),
+      'timeMin': date.startOf('day').toISOString(),
+      'timeMax': date.endOf('day').toISOString(),
       'showDeleted': false,
       'singleEvents': true,
       'maxResults': 10,
