@@ -1,13 +1,14 @@
 version: 2
 jobs:
   build:
+    branches:
+      only:
+        - develop
     docker:
       - image: circleci/node:8
     steps:
       - checkout
-      - run:
-          name: yarn install
-          command: yarn install
+      - run: yarn install
       - run:
           name: Deploy to gh-pages
           command: |
