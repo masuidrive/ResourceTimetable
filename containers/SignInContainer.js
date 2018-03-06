@@ -19,7 +19,7 @@ export default connect(
   })
 )(({gapiAuth, authorize}) => (
   <div>
-    <h1>Welcome to Resource Timetable for Goggle Calendar</h1>
+    <h1>Welcome to Resource Timetable for Google Calendar</h1>
     <SignInButton isSigningIn={gapiAuth == 'authorizing'} authorize={authorize}/>
     { gapiAuth }
   </div>
