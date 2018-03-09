@@ -54,7 +54,7 @@ export const reducer = (state = initialState, action) => {
 // ACTIONS
 export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
-  calendar.resourceEvents(new Date(2018,3-1,5)).then((resources) => {
+  calendar.resourceEvents(new Date()).then((resources) => {
     dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
   })
 }
