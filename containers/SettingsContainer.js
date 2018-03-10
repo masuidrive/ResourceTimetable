@@ -1,16 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { saveResourceSettings } from '../store'
+import { authorize } from '../store'
+
+const SignInButton = ({isSigningIn, authorize}) => (
+  isSigningIn ?
+    <button>Authorizing...</button>
+  :
+    <button onClick={() => authorize()}>Sign In</button>
+)
 
 export default connect(
   (state) => ({ // mapStateToPropsContainer
-    resourceSettings: state.resourceSettings
+    gapiAuth: state.gapiAuth
   }),
   (dispatch) => ({ // mapDispatchToProps
-    saveResourceSettings: bindActionCreators(saveResourceSettings, dispatch),
+    authorize: bindActionCreators(authorize, dispatch),
   })
-)(({resourceSettings, saveResourceSettings}) => (
+)(({gapiAuth, authorize}) => (
   <div>
     <h1>Settings</h1>
     <button onClick={() => saveResourceSettings()}>Save</button>

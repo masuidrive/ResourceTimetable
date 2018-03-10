@@ -4,7 +4,7 @@ import { initStore, initialize, authorize, unauthorize } from '../store'
 import withRedux from 'next-redux-wrapper'
 
 import SignInContainer from '../containers/SignInContainer'
-import CalendarContainer from '../containers/CalendarContainer'
+import SettingsContainer from '../containers/SettingsContainer'
 
 class Main extends React.Component {
   componentDidMount() {
@@ -28,7 +28,7 @@ class Main extends React.Component {
         return <SignInContainer/>
     
       case 'authorized':
-        return <CalendarContainer/>
+        return <SettingsContainer/>
     
       default:
         return this.loadingPage()

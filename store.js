@@ -110,7 +110,6 @@ export const initialize = () => dispatch => {
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
     }).then(() => {
-      console.log("auth succ")
       gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
       updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
     },
