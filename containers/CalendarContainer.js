@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { unauthorize } from '../store'
+import { unauthorize } from '../stores'
 
 import Timetable from '../components/Timetable'
 

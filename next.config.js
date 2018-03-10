@@ -4,6 +4,7 @@ const isProduction = (process.env.NODE_ENV == 'production')
 module.exports = {
   assetPrefix: isProduction ? `${process.env.DEPLOY_PREFIX}` : '',
   exportPathMap: () => ({
-    '/': { page: '/' }
+    '/': { page: '/' },
+    '/settings': { page: '/settings' },
   })
 }

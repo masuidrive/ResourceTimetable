@@ -1,25 +1,26 @@
-import React from 'react';
+import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { authorize } from '../store'
-
-const SignInButton = ({isSigningIn, authorize}) => (
-  isSigningIn ?
-    <button>Authorizing...</button>
-  :
-    <button onClick={() => authorize()}>Sign In</button>
-)
+import { updateResourceName, clearResourceSettings } from '../stores'
+import { Button, Input } from 'semantic-ui-react'
 
 export default connect(
   (state) => ({ // mapStateToPropsContainer
-    gapiAuth: state.gapiAuth
+    gapiAuth: state.gapiAuth,
+    resources: state.resources
   }),
   (dispatch) => ({ // mapDispatchToProps
-    authorize: bindActionCreators(authorize, dispatch),
+    clearResourceSettings: bindActionCreators(clearResourceSettings, dispatch),
+    updateResourceName: bindActionCreators(updateResourceName, dispatch),
   })
-)(({gapiAuth, authorize}) => (
+)(({resources, updateResourceName, clearResourceSettings}) => (
   <div>
     <h1>Settings</h1>
-    <button onClick={() => saveResourceSettings()}>Save</button>
+    {
+      resources === undefined ?
+        <div>loading</div> :
+        resources.map(r => <div><Input value={r.name} onChange={(e) => updateResourceName(r.calendarId, e.target.value)}/></div>)
+    }
+    <Button primary onClick={() => ResourceSettings()}>Reset</Button>
   </div>
 ));

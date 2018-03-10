@@ -4,8 +4,6 @@
   "private": true,
   "dependencies": {
     "@zeit/next-sass": "^0.1.1",
-    "element-react": "^1.4.8",
-    "element-theme-default": "^1.4.13",
     "moment": "^2.21.0",
     "moment-timezone": "^0.5.14",
     "next": "^5.0.0",
@@ -16,10 +14,11 @@
     "react-dom": "^16.2.0",
     "react-google-auth": "^0.4.1",
     "react-redux": "^5.0.7",
-    "react-timetable-events": "^1.0.1",
     "redux": "^3.7.2",
     "redux-devtools-extension": "^2.13.2",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.3.0",
+    "semantic-ui-react": "^0.78.3"
   },
   "scripts": {
     "start": "next",

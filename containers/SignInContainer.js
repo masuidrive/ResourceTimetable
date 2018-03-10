@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { authorize } from '../store'
+import { authorize } from '../stores'
 
 const SignInButton = ({isSigningIn, authorize}) => (
   isSigningIn ?
