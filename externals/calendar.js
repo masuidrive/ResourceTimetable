@@ -30,7 +30,8 @@ export class Calendar {
                 result[batchId].events = []
                 for(let item of singleResponse.result.items) {
                   // attendees[].emailにresource idと、 responseStatusが"accepted"なのを確認
-                  const active = typeof(item.attendees.
+                  console.log(item)
+                  const active = typeof((item.attendees || []).
                     find((a) => a.email == calId && a.responseStatus == "accepted"))=="object"
 
                   if(active && typeof item.start.dateTime == "string") {
