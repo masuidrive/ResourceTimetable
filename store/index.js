@@ -1,15 +1,15 @@
-import { createStore, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import makeAsyncScriptLoader from "react-async-script";
-
 import { calendar } from '../externals/calendar';
-
-
 
 const initialState = {
   resources: undefined,
-  resourceSettings: JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
+  // resourceSettings: JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
+  resourceSettings: {
+
+  },
   resourcesStatus: 'unloaded',
   gapiAuth: 'initializing'
 }
@@ -109,14 +109,15 @@ export const initialize = () => dispatch => {
       clientId: GOOGLE_CLIENT_ID,
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
-    }).then(() => {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
-      updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
-    },
-    () => {
-      console.log("auth error")      
-    }
-  );
+    }).then(
+      () => {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
+        updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
+      },
+      () => {
+        console.log("auth error")      
+      }
+    );
   });
 }
 

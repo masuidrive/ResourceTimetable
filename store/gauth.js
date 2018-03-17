@@ -1,7 +1,7 @@
 import { calendar } from '../externals/calendar';
 
 const initialState = {
-  gauth: 'initializing'
+  status: 'initializing'
 }
 
 export const actionTypes = {
@@ -15,13 +15,13 @@ export const actionTypes = {
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.AUTHORIZED:
-      return Object.assign({}, state, { gauth: 'authorized' })
+      return Object.assign({}, state, { status: 'authorized' })
     case actionTypes.AUTHORIZING:
-      return Object.assign({}, state, { gauth: 'authorizing' })
+      return Object.assign({}, state, { status: 'authorizing' })
       case actionTypes.UNAUTHORIZED:
-      return Object.assign({}, state, { gauth: 'unauthorized' })
+      return Object.assign({}, state, { status: 'unauthorized' })
     case actionTypes.AUTHORIZE_ERROR:
-    return Object.assign({}, state, { gauth: 'authorize_error' })
+    return Object.assign({}, state, { status: 'authorize_error' })
     default: return state
   }
 }
@@ -43,7 +43,6 @@ export const unauthorize = () => dispatch => {
 
 export const unauthorized = () => ({ type: actionTypes.UNAUTHORIZED })
 
-
 const updateAuthState = (isSignedIn) => {
   if(isSignedIn) {
     dispatch(authorized())
@@ -57,7 +56,6 @@ const updateAuthState = (isSignedIn) => {
 export const initializeGAuth = () => dispatch => {
   const gapi = window.gapi;
 
-
   gapi.load('client:auth2', () => {
     const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
     const SCOPES = "https://www.googleapis.com/auth/calendar";
@@ -67,15 +65,16 @@ export const initializeGAuth = () => dispatch => {
       clientId: GOOGLE_CLIENT_ID,
       discoveryDocs: DISCOVERY_DOCS,
       scope: SCOPES
-    }).then(() => {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
-      updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
-    },
-    () => {
-      console.log("auth error")      
-    }
-  );
-  });
+    }).then(
+      () => {
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
+        updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
+      },
+      () => {
+        console.log("auth error")      
+      }
+    )
+  })
 }
 
 export const initStore = (initialState = initialState) => {
