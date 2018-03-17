@@ -9,23 +9,17 @@ import { calendar } from '../externals/calendar';
 
 const initialState = {
   resources: undefined,
-  resourcesStatus: 'unloaded',
-
   resourceSettings: JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
-  
+  resourcesStatus: 'unloaded',
   gapiAuth: 'initializing'
 }
 
 export const actionTypes = {
-  LOADING_EVENTS: 'LOADING_EVENTS',
-  SET_EVENTS: 'SET_EVENTS',
-
   LOADING_RESOURCES: 'LOADING_RESOURCES',
-  SET_RESOURCES: 'SET_RESOURCES',
-  ERROR_RESOURCES: 'ERROR_RESOURCES',
+  LOAD_RESOURCES: 'LOAD_RESOURCES',
 
   CLEAR_RESOURCE_SETTINGS: 'CLEAR_RESOURCE_SETTINGS',
-  UPDATE_RESOURCE_NAME: 'UPDATE_RESOURCE_NAME',
+  SAVE_RESOURCE_SETTINGS: 'SAVE_RESOURCE_SETTINGS',
 
   UNAUTHORIZED: 'UNAUTHORIZED',
   AUTHORIZING: 'AUTHORIZING',
@@ -37,19 +31,13 @@ export const actionTypes = {
 // REDUCERS
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SET_RESOURCES:
-      return Object.assign({}, state, { resourcesStatus: 'loadedResources', resources: action.resources })
+    case actionTypes.LOAD_RESOURCES:
+      return Object.assign({}, state, { resourcesStatus: 'loaded', resources: action.resources })
     case actionTypes.LOADING_RESOURCES:
-      return Object.assign({}, state, { resourcesStatus: 'loadingResources' })
-    case actionTypes.SET_EVENTS:
-      return Object.assign({}, state, { resourcesStatus: 'loadedEvents', resources: action.resources })
-    case actionTypes.LOADING_EVENTS:
-      return Object.assign({}, state, { resourcesStatus: 'loadingEvents' })
-    case actionTypes.UPDATE_RESOURCE_NAME:
-      //window.localStorage["resourceSettings"] = JSON.stringify(action.resourceSettings)
-      //TODO
-      console.log(action.name)
-      return state;
+      return Object.assign({}, state, { resourcesStatus: 'loading', resources: undefined })
+      case actionTypes.SAVE_RESOURCE_SETTINGS:
+      window.localStorage["resourceSettings"] = JSON.stringify(action.resourceSettings)
+      return Object.assign({}, state, { resourceSettings: action.resourceSettings })
     case actionTypes.CLEAR_RESOURCE_SETTINGS:
       window.localStorage.removeItem("resourceSettings")
       return Object.assign({}, state, { resourceSettings: {} })
@@ -64,22 +52,17 @@ export const reducer = (state = initialState, action) => {
 }
 
 // ACTIONS
-export const loadResources = () => async dispatch => {
+export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
-  const resources = await calendar.loadResources()
-  dispatch({ type: actionTypes.SET_RESOURCES, resources: resources })
+  calendar.loadEvents(new Date()).then((resources) => {
+    dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
+  })
 }
 
-export const loadEvents = () => async dispatch => {
-  dispatch({ type: actionTypes.LOADING_EVENTS })
-  const resources = await calendar.loadEvents(new Date(2018,3-1,9))
-  dispatch({ type: actionTypes.SET_EVENTS, resources: resources })
-}
+export const loading_resources = () => ({ type: actionTypes.LOAD_RESOURCES })
 
-export const loading_events = () => ({ type: actionTypes.LOAD_EVENTS })
-
-export const updateResourceName = (resourceCalendarId, name) => (
-  { type: actionTypes.UPDATE_RESOURCE_NAME, resourceCalendarId, name }
+export const saveResourceSettings = (resourceSettings) => (
+  { type: actionTypes.SAVE_RESOURCE_SETTINGS, resourceSettings: resourceSettings }
 )
 
 export const clearResourceSettings = () => ({ type: actionTypes.CLEAR_RESOURCE_SETTINGS })
@@ -110,7 +93,7 @@ export const initialize = () => dispatch => {
   const updateAuthState = (isSignedIn) => {
     if(isSignedIn) {
       dispatch(authorized())
-      dispatch(loadEvents())
+      dispatch(loadResources())
     }
     else {
       dispatch(unauthorized())

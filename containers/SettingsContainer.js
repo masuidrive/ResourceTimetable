@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { updateResourceName, clearResourceSettings } from '../stores'
+import { updateResourceName, clearResourceSettings } from '../store'
 import { Button, Input } from 'semantic-ui-react'
 
 export default connect(

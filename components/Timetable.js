@@ -25,14 +25,6 @@ export default class TimeTable extends React.Component {
     scrollLeft: 0
 	};
 
-  componentDidMount() {
-    findDOMNode(this.refs.wrapper).addEventListener('scroll', (e) => this.handleScrollEvent(e))
-  }
-
-  componentWillUnmount() {
-    findDOMNode(this.refs.wrapper).removeEventListener('scroll', (e) => this.handleScrollEvent(e))
-  }
-
   handleScrollEvent(e) {
     const { scrollTop, scrollLeft } = e.target
     this.setState({
@@ -43,16 +35,19 @@ export default class TimeTable extends React.Component {
   render() {
     const { hourHeight, resourceWidth, resources, timeWidth, labelHeight } = this.props
     return (
-      <div ref="wrapper" style={{border: "1px solid gray", width: this.props.width, height: this.props.height, overflow: "auto"}}>
-        <div style={{width: resourceWidth * resources.length, height: hourHeight * 24, position: 'relative'}}>
-          <div style={{width: timeWidth, height: hourHeight * 24, left:this.state.scrollLeft,top:labelHeight,zIndex:1,position: 'absolute'}}>
-            { Array(24).fill(0).map((x, i) => (
-              <div style={{backgroundColor: 'red', width:timeWidth, height: hourHeight, top:hourHeight*i,left:0,position:'absolute'}}>{i}:00</div>
-            )) }
+      <div ref="wrapper" style={{width: this.props.width, height: this.props.height, overflow: "auto", margin:0,padding:0}}>
+          <div style={{width: timeWidth, height: labelHeight, zIndex:4,left:0,top:0,position: 'absolute',display: 'block',backgroundColor: 'blue'}}>
+            123
           </div>
-          <div style={{width: resourceWidth * resources.length, height: labelHeight, left: 0, top: this.state.scrollTop,zIndex:2,position: 'absolute', backgroundColor: 'gray'}}>
+        <div style={{width: resourceWidth * resources.length, height: hourHeight * 24, position: 'relative', margin:0,padding:0}}>
+          <div style={{width: resourceWidth * resources.length, height: labelHeight, left: 0, top:0,zIndex:2,position: 'sticky', backgroundColor: 'gray'}}>
             { resources.map((resource, resourceIndex) => (
               <div style={{backgroundColor: 'red', width:resourceWidth, height: labelHeight, top:0,left:resourceIndex*resourceWidth+timeWidth,position:'absolute'}}>{resource.name}</div>
+            )) }
+          </div>
+          <div style={{width: timeWidth, height: hourHeight * 24, zIndex:1,left:0,top:0,position: 'sticky'}}>
+            { Array(24).fill(0).map((x, i) => (
+              <div style={{backgroundColor: 'red', width:timeWidth, height: hourHeight, top:hourHeight*i,left:0,position:'absolute'}}>{i}:00</div>
             )) }
           </div>
           { resources.map((resource, resourceIndex) => (

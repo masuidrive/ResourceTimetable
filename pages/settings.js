@@ -1,6 +1,6 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { initStore, initialize, authorize, unauthorize } from '../stores'
+import { initStore, initialize } from '../store'
 import withRedux from 'next-redux-wrapper'
 
 import SignInContainer from '../containers/SignInContainer'
