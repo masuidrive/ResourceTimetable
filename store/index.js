@@ -6,10 +6,14 @@ import { calendar } from '../externals/calendar';
 
 const initialState = {
   resources: undefined,
-  // resourceSettings: JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
-  resourceSettings: {
-
-  },
+  resourceSettings:// JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
+{
+  resources: [
+    {calendarId:"toreta.in_2d34323338373138352d373032@resource.calendar.google.com", name:"ROOM A"},
+    {calendarId:"toreta.in_2d3138373333323236313134@resource.calendar.google.com", name:"ROOM B"},    
+    {calendarId:"toreta.in_2d33393636353630392d313339@resource.calendar.google.com", name:"ROOM C"},    
+  ]
+},
   resourcesStatus: 'unloaded',
   gapiAuth: 'initializing'
 }
@@ -54,8 +58,9 @@ export const reducer = (state = initialState, action) => {
 // ACTIONS
 export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
-  calendar.loadEvents(new Date()).then((resources) => {
-    dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
+  calendar.loadEvents(new Date(2018,3-1,15)).then((resources) => {
+  //  calendar.loadEvents(new Date()).then((resources) => {
+      dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
   })
 }
 
@@ -84,7 +89,6 @@ export const unauthorize = () => dispatch => {
 }
 
 export const unauthorized = () => ({ type: actionTypes.UNAUTHORIZED })
-
 
 // Initialize GAPI
 export const initialize = () => dispatch => {

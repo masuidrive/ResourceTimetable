@@ -19,19 +19,13 @@ export class Calendar {
               })
             }
           }
-          // sort by resource name
-          resolve(result.sort((a, b) => {
-            const aa = a.name.toUpperCase(), bb = b.name.toUpperCase()
-            if(aa < bb) return -1
-            if(aa > bb) return 1
-            return 0
-          }))
+          resolve(result)
         },
         (reason) => {
           reject(reason)
       })
     });
-  }  
+  }
 
   // get events
   async loadEvents(date) {
