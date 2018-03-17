@@ -11,7 +11,8 @@ const initialState = {
   resources: [
     {calendarId:"toreta.in_2d34323338373138352d373032@resource.calendar.google.com", name:"ROOM A"},
     {calendarId:"toreta.in_2d3138373333323236313134@resource.calendar.google.com", name:"ROOM B"},    
-    {calendarId:"toreta.in_2d33393636353630392d313339@resource.calendar.google.com", name:"ROOM C"},    
+    {calendarId:"toreta.in_2d33393636353630392d313339@resource.calendar.google.com", name:"ROOM C"},
+    {calendarId:"toreta.in_2d31313739343735382d353039@resource.calendar.google.com", name:"?????", hidden: true},
   ]
 },
   resourcesStatus: 'unloaded',

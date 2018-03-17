@@ -3,12 +3,33 @@ import PropTypes from 'prop-types'
 import { findDOMNode } from 'react-dom'
 import moment from 'moment-timezone'
 
+const applySettingsToResources = (resources, settings) => {
+  // sort by resource name
+  resources = resources.sort((a, b) => {
+    const aa = a.name.toUpperCase(), bb = b.name.toUpperCase()
+    if(aa < bb) return -1
+    if(aa > bb) return 1
+    return 0
+  })
+
+  // array settings
+  var result = settings.resources.map((rs) => {
+    return rs.hidden ? undefined : resources.find((r2) => r2.calendarId === rs.calendarId)
+  })
+  resources = resources.filter((r) => {
+    return !settings.resources.find((r2) => r.calendarId === r2.calendarId)
+  })
+
+  return result.concat(resources).filter((r) => r !== undefined)
+}
+
 export default class TimeTable extends React.Component {
   static propTypes = {
     hourHeight: PropTypes.number,
     resourceWidth: PropTypes.number,
     labelWidth: PropTypes.number,
     labelHeight: PropTypes.number,
+    settings: PropTypes.object,
   }
 
   static defaultProps = {
@@ -16,10 +37,12 @@ export default class TimeTable extends React.Component {
     resourceHeight: 40,
     labelHeight: 40,
     labelWidth: 160,
+    settings: {}
   }
 
   render() {
-    const { hourWidth, resourceHeight, resources, labelWidth, labelHeight } = this.props
+    const { hourWidth, resourceHeight, labelWidth, labelHeight } = this.props
+    const resources = applySettingsToResources(this.props.resources, this.props.settings)
     return (
       <div ref="wrapper" style={{width: this.props.width, height: this.props.height, overflow: "auto", margin:0,padding:0}}>
           <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:0, top:0, position: 'absolute',display: 'block', backgroundColor: 'blue'}}>
