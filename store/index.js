@@ -3,7 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 import makeAsyncScriptLoader from "react-async-script";
 
-import { calendar } from './externals/calendar';
+import { calendar } from '../externals/calendar';
 
 
 
