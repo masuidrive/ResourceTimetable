@@ -10,8 +10,8 @@ export default connect(
     resources: state.resources
   }),
   (dispatch) => ({ // mapDispatchToProps
-    clearResourceSettings: bindActionCreators(clearResourceSettings, dispatch),
-    updateResourceName: bindActionCreators(updateResourceName, dispatch),
+    //clearResourceSettings: bindActionCreators(clearResourceSettings, dispatch),
+    //updateResourceName: bindActionCreators(updateResourceName, dispatch),
   })
 )(({resources, updateResourceName, clearResourceSettings}) => (
   <div>
