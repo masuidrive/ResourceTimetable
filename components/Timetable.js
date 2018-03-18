@@ -13,11 +13,17 @@ const applySettingsToResources = (resources, settings) => {
   })
 
   // array settings
-  var result = settings.resources.map((rs) => {
-    return rs.hidden ? undefined : resources.find((r2) => r2.calendarId === rs.calendarId)
+  var result = settings.map((rs) => {
+    var resource = resources.find((r2) => r2.calendarId === rs.calendarId)
+    if(resource == undefined) {
+      return undefined
+    }
+    resource.name = rs.name
+    return rs.hidden ? undefined : resource
   })
+
   resources = resources.filter((r) => {
-    return !settings.resources.find((r2) => r.calendarId === r2.calendarId)
+    return !settings.find((r2) => r.calendarId === r2.calendarId)
   })
 
   return result.concat(resources).filter((r) => r !== undefined)

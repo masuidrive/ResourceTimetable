@@ -7,14 +7,14 @@ import { calendar } from '../externals/calendar';
 const initialState = {
   resources: undefined,
   resourceSettings:// JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
-{
-  resources: [
+
+   [
     {calendarId:"toreta.in_2d34323338373138352d373032@resource.calendar.google.com", name:"ROOM A"},
     {calendarId:"toreta.in_2d3138373333323236313134@resource.calendar.google.com", name:"ROOM B"},    
     {calendarId:"toreta.in_2d33393636353630392d313339@resource.calendar.google.com", name:"ROOM C"},
     {calendarId:"toreta.in_2d31313739343735382d353039@resource.calendar.google.com", name:"?????", hidden: true},
   ]
-},
+,
   resourcesStatus: 'unloaded',
   gapiAuth: 'initializing'
 }
@@ -25,6 +25,7 @@ export const actionTypes = {
 
   CLEAR_RESOURCE_SETTINGS: 'CLEAR_RESOURCE_SETTINGS',
   SAVE_RESOURCE_SETTINGS: 'SAVE_RESOURCE_SETTINGS',
+  SAVE_RESOURCE_SETTINGS: 'UPDATE_RESOURCE_SETTINGS',
 
   UNAUTHORIZED: 'UNAUTHORIZED',
   AUTHORIZING: 'AUTHORIZING',
@@ -37,10 +38,10 @@ export const actionTypes = {
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.LOAD_RESOURCES:
-      return Object.assign({}, state, { resourcesStatus: 'loaded', resources: action.resources })
+      return Object.assign({}, state, { resourcesStatus: 'loaded', resources: action.resources, resourceSettings: updateSettings(action.resources, state.resourceSettings) })
     case actionTypes.LOADING_RESOURCES:
       return Object.assign({}, state, { resourcesStatus: 'loading', resources: undefined })
-      case actionTypes.SAVE_RESOURCE_SETTINGS:
+    case actionTypes.SAVE_RESOURCE_SETTINGS:
       window.localStorage["resourceSettings"] = JSON.stringify(action.resourceSettings)
       return Object.assign({}, state, { resourceSettings: action.resourceSettings })
     case actionTypes.CLEAR_RESOURCE_SETTINGS:
@@ -56,12 +57,41 @@ export const reducer = (state = initialState, action) => {
   }
 }
 
+const updateSettings = (resources, settings) => {
+  console.log(settings)
+  // sort by resource name
+  resources = resources.sort((a, b) => {
+    const aa = a.name.toUpperCase(), bb = b.name.toUpperCase()
+    if(aa < bb) return -1
+    if(aa > bb) return 1
+    return 0
+  })
+
+  var result = settings.filter((rs) => {
+    return resources.find((r2) => r2.calendarId === rs.calendarId)
+  })
+  console.log(result)
+
+  resources = resources.map((r) => {
+    if(settings.find((r2) => r.calendarId === r2.calendarId)) {
+      return undefined
+    }
+    else {
+      console.log(r)
+      return({
+        calendarId: r.calendarId,
+        name: r.name
+      })
+    }
+  })
+  return result.concat(resources).filter((r) => r !== undefined)
+}
+
 // ACTIONS
 export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
   calendar.loadEvents(new Date(2018,3-1,15)).then((resources) => {
-  //  calendar.loadEvents(new Date()).then((resources) => {
-      dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
+    dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
   })
 }
 
@@ -72,6 +102,8 @@ export const saveResourceSettings = (resourceSettings) => (
 )
 
 export const clearResourceSettings = () => ({ type: actionTypes.CLEAR_RESOURCE_SETTINGS })
+
+export const updateResourceSettings = () => ({ type: actionTypes.UPDATE_RESOURCE_SETTINGS })
 
 export const authorize = () => dispatch => {
   const gapi = window.gapi;

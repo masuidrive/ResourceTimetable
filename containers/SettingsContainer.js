@@ -7,19 +7,24 @@ import { Button, Input } from 'semantic-ui-react'
 export default connect(
   (state) => ({ // mapStateToPropsContainer
     gapiAuth: state.gapiAuth,
-    resources: state.resources
+    settings: state.resourceSettings
   }),
   (dispatch) => ({ // mapDispatchToProps
     //clearResourceSettings: bindActionCreators(clearResourceSettings, dispatch),
     //updateResourceName: bindActionCreators(updateResourceName, dispatch),
   })
-)(({resources, updateResourceName, clearResourceSettings}) => (
+)(({settings, updateResourceName, clearResourceSettings}) => (
   <div>
     <h1>Settings</h1>
     {
-      resources === undefined ?
+      settings === undefined ?
         <div>loading</div> :
-        resources.map(r => <div><Input value={r.name} onChange={(e) => updateResourceName(r.calendarId, e.target.value)}/></div>)
+        settings.map(r => 
+          <div key={r.calendarId}>
+            <Input value={r.name} onChange={(e) => updateResourceName(r.calendarId, e.target.value)}/>
+            { r.hidden ? "HIDDEN" : "SHOW"}
+          </div>
+        )
     }
     <Button primary onClick={() => ResourceSettings()}>Reset</Button>
   </div>
