@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git checkout gh-pages &&
+git checkout gh-pages && git fetch origin gh-pages &&
 git checkout develop &&
 docker-compose run react ./bin/build.sh &&
 touch out/.nojekyll &&
