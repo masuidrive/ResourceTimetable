@@ -2,7 +2,7 @@
 
 git checkout gh-pages &&
 git checkout develop &&
-./bin/build.sh &&
+docker-compose run react ./bin/build.sh &&
 touch out/.nojekyll &&
 git add -f out &&
 TREE_OBJ_ID=`git write-tree --prefix=out` &&
