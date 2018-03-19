@@ -8,10 +8,14 @@ const initialState = {
   resources: undefined,
   resourceSettings: [],
   resourcesStatus: 'unloaded',
-  gapiAuth: 'initializing'
+  gapiAuth: 'initializing',
+  shownSettingsModal: false
 }
 
 export const actionTypes = {
+  SHOW_SETTINGS_MODAL: 'SHOW_SETTINGS_MODAL',
+  HIDE_SETTINGS_MODAL: 'HIDE_SETTINGS_MODAL',
+
   LOADING_RESOURCES: 'LOADING_RESOURCES',
   LOAD_RESOURCES: 'LOAD_RESOURCES',
 
@@ -28,6 +32,10 @@ export const actionTypes = {
 // REDUCERS
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.SHOW_SETTINGS_MODAL:
+      return Object.assign({}, state, { shownSettingsModal: true })
+    case actionTypes.HIDE_SETTINGS_MODAL:
+      return Object.assign({}, state, { shownSettingsModal: false })
     case actionTypes.LOAD_RESOURCES:
       return Object.assign({}, state, { resourcesStatus: 'loaded', resources: action.resources, resourceSettings: updateSettings(action.resources, state.resourceSettings) })
     case actionTypes.LOADING_RESOURCES:
@@ -82,6 +90,9 @@ const updateSettings = (resources, settings) => {
 }
 
 // ACTIONS
+export const showSettingsModal = () => ({ type: actionTypes.SHOW_SETTINGS_MODAL })
+export const hideSettingsModal = () => ({ type: actionTypes.HIDE_SETTINGS_MODAL })
+
 export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
   calendar.loadEvents(new Date()).then((resources) => {

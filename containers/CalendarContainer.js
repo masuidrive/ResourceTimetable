@@ -18,7 +18,7 @@ export default connect(
     unauthorize: bindActionCreators(unauthorize, dispatch),
   })
 )(({resources, settings, unauthorize}) => {
-  if(resources === undefined) {
+  if(resources === undefined || settings === undefined) {
     return (<div>waiting...</div>)
   }
   return (

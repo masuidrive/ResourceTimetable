@@ -1,6 +1,6 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { initStore, initialize } from '../store'
+import { initStore, initialize, showSettingsModal } from '../store'
 import withRedux from 'next-redux-wrapper'
 import { Header, Modal, Icon, Button } from 'semantic-ui-react'
 
@@ -23,26 +23,26 @@ class Main extends React.Component {
     if(this.props.isServer) {
       return this.loadingPage()
     }
+    console.log(this.props)
 
     var main = undefined;
     switch (this.props.gapiAuth) {
       case 'unauthorized':
       case 'authorizing':
         main = <SignInContainer/>
-    
+        break
       case 'authorized':
-        main = <CalendarContainer/>
-    
+        main = <div>
+          <CalendarContainer/>
+          <Button content="Settings" onClick={() => this.props.showSettingsModal()}/>
+        </div>
+        break
       default:
         main = this.loadingPage()
     }
-
-    var modal = undefined
-    modal = <SettingsModalContainer/>
-
     return <div>
-      {main}
-      {modal}
+      { main }
+      <SettingsModalContainer/>
     </div>
   }
 }
@@ -52,7 +52,8 @@ const mapStateToProps = (state, ownProps) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  initialize: bindActionCreators(initialize, dispatch)
+  initialize: bindActionCreators(initialize, dispatch),
+  showSettingsModal: bindActionCreators(showSettingsModal, dispatch),
 })
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Main)

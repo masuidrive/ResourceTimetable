@@ -35,7 +35,7 @@ export default class TimeTable extends React.Component {
     resourceHeight: PropTypes.number,
     labelWidth: PropTypes.number,
     labelHeight: PropTypes.number,
-    settings: PropTypes.object,
+    settings: PropTypes.array,
   }
 
   static defaultProps = {

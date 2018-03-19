@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { saveResourceSettings } from '../store'
 import { Button, Input, Icon } from 'semantic-ui-react'
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import Sortable from 'react-sortablejs'
 
 export default connect(
   (state) => ({ // mapStateToPropsContainer
@@ -14,8 +14,8 @@ export default connect(
     saveResourceSettings: bindActionCreators(saveResourceSettings, dispatch),
   })
 )(({settings, saveResourceSettings}) => {
-  const onSortEnd = ({ oldIndex, newIndex }) => {
-    saveResourceSettings(arrayMove(settings, oldIndex, newIndex))
+  const onSortEnd = (order) => {
+    saveResourceSettings(order.map((calendarId) => settings.find((s) => s.calendarId === calendarId)))
   }
 
   const toggleVisibility = (calendarId) => () => {
@@ -38,31 +38,20 @@ export default connect(
     saveResourceSettings(newSettings)
   }
 
-  const SortableItem = SortableElement(({value}) => {
-    return <div>
-      <Icon name="content" color="grey" link={true} style={{marginRight: "0.5em"}}/>
-      <Input value={ value.name } icon={{ name: "remove", color: "grey" }} onChange={ changeName(value.calendarId) } />
+  const els = settings.map((value) =>
+    <div key={value.calendarId} data-id={value.calendarId}>
+      <Icon name="content" color="grey" link={true}/>
+      <Input value={ value.name } onChange={ changeName(value.calendarId) } style={{margin: "0.1em 0.5em"}} />
       <Button content={ value.hidden ? "Hidden" : "Shown" } active={ !value.hidden } toggle={ true } onClick={ toggleVisibility(value.calendarId) }/>
-      { }
     </div>
-  })
+  )
   
-  const SortableList = SortableContainer(({items}) => {
-    return (
-      <ul>
-        {items.map((value, index) => (
-          <SortableItem key={`item-${value.calendarId}`} index={index} value={value} />
-        ))}
-      </ul>
-    );
-  })
-  
-
-  return <div>
-    {
-      settings === undefined ?
-        <div>loading</div> :
-        <SortableList items={settings} onSortEnd={onSortEnd}/>
-      }
-  </div>
+  if(settings === undefined) {
+    return <div>Loading...</div>
+  }
+  return(
+    <Sortable onChange={(order, sortable, evt) => { onSortEnd(order) }}>
+    {els}
+    </Sortable>
+  )
 })
