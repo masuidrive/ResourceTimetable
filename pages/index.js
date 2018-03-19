@@ -2,9 +2,11 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { initStore, initialize } from '../store'
 import withRedux from 'next-redux-wrapper'
+import { Header, Modal, Icon, Button } from 'semantic-ui-react'
 
 import SignInContainer from '../containers/SignInContainer'
 import CalendarContainer from '../containers/CalendarContainer'
+import SettingsModalContainer from '../containers/SettingsModalContainer'
 
 class Main extends React.Component {
   componentDidMount() {
@@ -22,17 +24,26 @@ class Main extends React.Component {
       return this.loadingPage()
     }
 
+    var main = undefined;
     switch (this.props.gapiAuth) {
       case 'unauthorized':
       case 'authorizing':
-        return <SignInContainer/>
+        main = <SignInContainer/>
     
       case 'authorized':
-        return <CalendarContainer/>
+        main = <CalendarContainer/>
     
       default:
-        return this.loadingPage()
+        main = this.loadingPage()
     }
+
+    var modal = undefined
+    modal = <SettingsModalContainer/>
+
+    return <div>
+      {main}
+      {modal}
+    </div>
   }
 }
 

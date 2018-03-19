@@ -6,15 +6,7 @@ import { calendar } from '../externals/calendar';
 
 const initialState = {
   resources: undefined,
-  resourceSettings:// JSON.parse(typeof(window) == 'undefined' ? '{}' : window.localStorage["resourceSettings"] || "{}"),
-
-   [
-    {calendarId:"toreta.in_2d34323338373138352d373032@resource.calendar.google.com", name:"ROOM A"},
-    {calendarId:"toreta.in_2d3138373333323236313134@resource.calendar.google.com", name:"ROOM B"},    
-    {calendarId:"toreta.in_2d33393636353630392d313339@resource.calendar.google.com", name:"ROOM C"},
-    {calendarId:"toreta.in_2d31313739343735382d353039@resource.calendar.google.com", name:"?????", hidden: true},
-  ]
-,
+  resourceSettings: [],
   resourcesStatus: 'unloaded',
   gapiAuth: 'initializing'
 }
@@ -23,9 +15,8 @@ export const actionTypes = {
   LOADING_RESOURCES: 'LOADING_RESOURCES',
   LOAD_RESOURCES: 'LOAD_RESOURCES',
 
-  CLEAR_RESOURCE_SETTINGS: 'CLEAR_RESOURCE_SETTINGS',
   SAVE_RESOURCE_SETTINGS: 'SAVE_RESOURCE_SETTINGS',
-  SAVE_RESOURCE_SETTINGS: 'UPDATE_RESOURCE_SETTINGS',
+  RESET_RESOURCE_SETTINGS: 'RESET_RESOURCE_SETTINGS',
 
   UNAUTHORIZED: 'UNAUTHORIZED',
   AUTHORIZING: 'AUTHORIZING',
@@ -44,9 +35,14 @@ export const reducer = (state = initialState, action) => {
     case actionTypes.SAVE_RESOURCE_SETTINGS:
       window.localStorage["resourceSettings"] = JSON.stringify(action.resourceSettings)
       return Object.assign({}, state, { resourceSettings: action.resourceSettings })
-    case actionTypes.CLEAR_RESOURCE_SETTINGS:
-      window.localStorage.removeItem("resourceSettings")
-      return Object.assign({}, state, { resourceSettings: {} })
+    case actionTypes.RESET_RESOURCE_SETTINGS:
+      if(state.resources === undefined) {
+        return state
+      }
+      else {
+        window.localStorage.removeItem("resourceSettings")
+        return Object.assign({}, state, { resourceSettings: updateSettings(state.resources, []) })
+      }
     case actionTypes.AUTHORIZED:
       return Object.assign({}, state, { gapiAuth: 'authorized', resourcesStatus: 'unloaded', resources: undefined })
     case actionTypes.AUTHORIZING:
@@ -58,7 +54,6 @@ export const reducer = (state = initialState, action) => {
 }
 
 const updateSettings = (resources, settings) => {
-  console.log(settings)
   // sort by resource name
   resources = resources.sort((a, b) => {
     const aa = a.name.toUpperCase(), bb = b.name.toUpperCase()
@@ -70,27 +65,26 @@ const updateSettings = (resources, settings) => {
   var result = settings.filter((rs) => {
     return resources.find((r2) => r2.calendarId === rs.calendarId)
   })
-  console.log(result)
 
   resources = resources.map((r) => {
     if(settings.find((r2) => r.calendarId === r2.calendarId)) {
       return undefined
     }
     else {
-      console.log(r)
       return({
         calendarId: r.calendarId,
         name: r.name
       })
     }
   })
+  
   return result.concat(resources).filter((r) => r !== undefined)
 }
 
 // ACTIONS
 export const loadResources = () => dispatch => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
-  calendar.loadEvents(new Date(2018,3-1,15)).then((resources) => {
+  calendar.loadEvents(new Date()).then((resources) => {
     dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
   })
 }
@@ -101,9 +95,7 @@ export const saveResourceSettings = (resourceSettings) => (
   { type: actionTypes.SAVE_RESOURCE_SETTINGS, resourceSettings: resourceSettings }
 )
 
-export const clearResourceSettings = () => ({ type: actionTypes.CLEAR_RESOURCE_SETTINGS })
-
-export const updateResourceSettings = () => ({ type: actionTypes.UPDATE_RESOURCE_SETTINGS })
+export const resetResourceSettings = () => ({ type: actionTypes.RESET_RESOURCE_SETTINGS })
 
 export const authorize = () => dispatch => {
   const gapi = window.gapi;
@@ -126,6 +118,7 @@ export const unauthorized = () => ({ type: actionTypes.UNAUTHORIZED })
 // Initialize GAPI
 export const initialize = () => dispatch => {
   const gapi = window.gapi;
+  dispatch(saveResourceSettings(JSON.parse(window.localStorage["resourceSettings"] || "[]")))
 
   const updateAuthState = (isSignedIn) => {
     if(isSignedIn) {

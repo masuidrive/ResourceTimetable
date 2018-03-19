@@ -43,7 +43,7 @@ export class Calendar {
       resource.events = []
       for(let item of command.result.items) {
         // attendees[].emailにresource idと、 responseStatusが"accepted"なのを確認
-        const active = typeof(item.attendees.
+        const active = typeof((item.attendees || []).
           find((a) => a.email == resource.calendarId && a.responseStatus == "accepted")) == "object"
 
         if(active && typeof item.start.dateTime == "string") {
