@@ -16,13 +16,13 @@ export default connect(
   }),
   (dispatch) => ({ // mapDispatchToProps
   })
-)(({resources, settings, unauthorize, style}) => {
+)(({resources, settings, unauthorize}) => {
   if(resources === undefined || settings === undefined) {
     return (<div>waiting...</div>)
   }
   return (
-    <div style={style}>
-      <Timetable resources={resources} settings={settings} width="100%" height="90vh" />
+    <div style={{overflow:"hidden"}}>
+      <Timetable resources={resources} settings={settings}/>
     </div>
   )
 });

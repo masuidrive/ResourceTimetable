@@ -57,6 +57,7 @@ export class Calendar {
               url: item.htmlLink,
               start: start,
               end: end,
+              href: item.htmlLink
             })
           }
         }

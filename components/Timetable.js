@@ -43,6 +43,7 @@ export default class TimeTable extends React.Component {
     resourceHeight: 40,
     labelHeight: 40,
     labelWidth: 160,
+    headerHeight: 34,
     settings: {}
   }
 
@@ -54,26 +55,32 @@ export default class TimeTable extends React.Component {
   }
 
   render() {
-    const { hourWidth, resourceHeight, labelWidth, labelHeight } = this.props
+    const { hourWidth, resourceHeight, labelWidth, labelHeight, headerHeight } = this.props
     const resources = applySettingsToResources(this.props.resources, this.props.settings)
     return (
-      <div style={{position: 'relative'}}>
-        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:0, top:0, position: 'absolute', display: 'block', backgroundColor: '#CBE86B'}}></div>
+      <div>
+        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:0, top:headerHeight, position: 'absolute', display: 'block', backgroundColor: '#CBE86B',borderRight: "1px solid #B7D675"}}></div>
 
-      <div ref="wrapper" style={{position: 'relative', width: this.props.width, height: this.props.height, overflow: "auto", margin:0,padding:0}} ref="wrapper">
-      {/*
-         */} 
+      <div ref="wrapper" style={{position: 'absolute',top:0,left:0, width: '100vw', height: '100vh', overflow: "auto", padding:"0 0 0 0",margin:0, borderTop: "34px solid red",WebkitOverflowScrolling: "touch"}}>
         <div style={{width: labelWidth + hourWidth * 24, height: resourceHeight * resources.length + labelHeight, position: 'relative', margin:0,padding:0}}>
-          <div style={{width: hourWidth * 24, height: resourceHeight, zIndex:1,left:labelWidth,top:0,position: '-webkit-sticky',position: 'sticky', "-webkit-overflow-scrolling": "touch"}}>
+          <div style={{width: hourWidth * 24, height: resourceHeight, zIndex:1,left:labelWidth,top:0,position: '-webkit-sticky',position: 'sticky'}}>
             { Array(24).fill(0).map((x, i) => (
-              <div style={{backgroundColor: '#cbe86b', width:hourWidth, height: resourceHeight, left:hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
+              <div style={{backgroundColor: '#cbe86b', borderRight: "1px dashed #B7D675", padding: "2px", width:hourWidth, height: resourceHeight, left:hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
             )) }
           </div>
-          <div style={{width: labelWidth, height: resourceHeight * resources.length, left: 0, top:0,zIndex:2,position: '-webkit-sticky',  position: 'sticky', "-webkit-overflow-scrolling": "touch", backgroundColor: 'gray'}}>
+          <div style={{width: labelWidth, height: resourceHeight * resources.length, left: 0, top:0,zIndex:2,position: '-webkit-sticky',  position: 'sticky'}}>
             { resources.map((resource, resourceIndex) => (
-              <div style={{backgroundColor: (resourceIndex%2==0?'white':'#FCFCD7'), width:labelWidth, height: resourceHeight, left:0,top:resourceIndex*resourceHeight,position:'absolute'}} key={`label-${resource.calendarId}`}>{resource.name}</div>
+              <div style={{width:labelWidth, height: resourceHeight, left:0,top:resourceIndex*resourceHeight,position:'absolute',borderBottom:"1px solid #eee",borderRight:"1px solid #eee",backgroundColor:'white'}} key={`label-${resource.calendarId}`}>{resource.name}</div>
             )) }
           </div>
+          { Array(resources.length+1).fill(0).map((x, i) => (
+            <div style={{borderBottom: '1px solid #eee', width:hourWidth*24+labelWidth, height: 1, left:0,top:i*resourceHeight+resourceHeight-1,position:'absolute'}} key={`resourcec-line-${i}`}></div>
+          ))}
+          { Array(24).fill(0).map((x, i) => (
+            <div style={{borderRight: '1px dashed #eee', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i+1)-1,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
+          )) }
+
+          
           { resources.map((resource, resourceIndex) => (
             resource.events.map((event) => {
               const start = moment(event.start).hour() * 60 + moment(event.start).minute()
@@ -82,9 +89,9 @@ export default class TimeTable extends React.Component {
               const x = start * hourWidth / 60 + labelWidth
               const width = (end - start) * hourWidth / 60
               return(
-                <div style={{backgroundColor: "#2796CB",color: "white", fontSize: 10, padding: "1px 4px", border: "1px solid white", borderRadius: 6, overflow: 'hidden', position: 'absolute', height: `${resourceHeight}px`, width: `${width}px`, top: `${y}px`, left: `${x}px`}} key={`event-${event.id}`}>
+                <a href={event.href} style={{backgroundColor: "#2796CB",color: "white", fontSize: 10, padding: "2px 4px", borderRadius: 6, overflow: 'hidden', position: 'absolute', height: `${resourceHeight-1}px`, lineHeight:"1.2em", width: `${width-1}px`, top: `${y}px`, left: `${x}px`}} key={`event-${event.id}`}>
                   {event.title}
-                </div>
+                </a>
               )
             })
           )) }

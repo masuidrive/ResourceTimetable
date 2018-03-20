@@ -28,8 +28,8 @@ class Main extends React.Component {
           </Menu.Item>
         </Container>
         <Menu.Menu position='right'>
-        <Menu.Item name='Settings' onClick={() => this.props.showSettingsModal()} />
-        <Menu.Item name='Logout' onClick={() => this.props.unauthorize()} />
+          <Menu.Item name='Settings' onClick={() => this.props.showSettingsModal()} />
+          <Menu.Item name='Logout' onClick={() => this.props.unauthorize()} />
         </Menu.Menu>
       </Menu>
     )
@@ -48,7 +48,7 @@ class Main extends React.Component {
         break
       case 'authorized':
         main = <div>
-          <CalendarContainer style={{marginTop: 34, position: 'relative'}}/>
+          <CalendarContainer />
         </div>
         break
       default:
