@@ -24,7 +24,7 @@ class Main extends React.Component {
       <Menu fixed='top' size="tiny" inverted>
         <Container>
           <Menu.Item as='a' header>
-            Meeting rooms on Google Calendar.
+            Meetie.
           </Menu.Item>
         </Container>
         <Menu.Menu position='right'>
