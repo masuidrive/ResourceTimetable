@@ -15,16 +15,14 @@ export default connect(
     settings: state.resourceSettings
   }),
   (dispatch) => ({ // mapDispatchToProps
-    unauthorize: bindActionCreators(unauthorize, dispatch),
   })
-)(({resources, settings, unauthorize}) => {
+)(({resources, settings, unauthorize, style}) => {
   if(resources === undefined || settings === undefined) {
     return (<div>waiting...</div>)
   }
   return (
-    <div>
+    <div style={style}>
       <Timetable resources={resources} settings={settings} width="100%" height="90vh" />
-      <button onClick={() => unauthorize()}>Sign Out</button>
     </div>
   )
 });
