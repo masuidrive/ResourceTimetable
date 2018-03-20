@@ -61,12 +61,12 @@ export default class TimeTable extends React.Component {
           <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:0, top:0, position: 'absolute',display: 'block', backgroundColor: '#689090'}}>
           </div>
         <div style={{width: labelWidth + hourWidth * 24, height: resourceHeight * resources.length + labelHeight, position: 'relative', margin:0,padding:0}}>
-          <div style={{width: hourWidth * 24, height: resourceHeight, zIndex:1,left:labelWidth,top:0,position: 'sticky'}}>
+          <div style={{width: hourWidth * 24, height: resourceHeight, zIndex:1,left:labelWidth,top:0,position: '-webkit-sticky',position: 'sticky'}}>
             { Array(24).fill(0).map((x, i) => (
-              <div style={{backgroundColor: '#C8D4CB', width:hourWidth, height: resourceHeight, left:hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
+              <div style={{backgroundColor: '#C8D4CB', width:hourWidth, height: resourceHeight, left:labelWidth+hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
             )) }
           </div>
-          <div style={{width: labelWidth, height: resourceHeight * resources.length, left: 0, top:0,zIndex:2,position: 'sticky', backgroundColor: 'gray'}}>
+          <div style={{width: labelWidth, height: resourceHeight * resources.length, left: 0, top:0,zIndex:2,position: '-webkit-sticky',  position: 'sticky', backgroundColor: 'gray'}}>
             { resources.map((resource, resourceIndex) => (
               <div style={{backgroundColor: '#C8D4CB', width:labelWidth, height: resourceHeight, left:0,top:resourceIndex*resourceHeight,position:'absolute'}} key={`label-${resource.calendarId}`}>{resource.name}</div>
             )) }
