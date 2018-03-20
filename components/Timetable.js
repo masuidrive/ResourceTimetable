@@ -59,25 +59,25 @@ export default class TimeTable extends React.Component {
     const resources = applySettingsToResources(this.props.resources, this.props.settings)
     return (
       <div>
-        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:0, top:headerHeight, position: 'absolute', display: 'block', backgroundColor: '#CBE86B',borderRight: "1px solid #B7D675"}}></div>
+        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:"5vw", marginTop: '5vh', top:headerHeight, position: 'absolute', display: 'block', backgroundColor: '#ECECEB',borderRight: "1px solid #888", borderBottom: "1px solid #888"}}>&lt; 3/15 &gt;</div>
 
-      <div ref="wrapper" style={{position: 'absolute',top:0,left:0, width: '100vw', height: '100vh', overflow: "auto", padding:"0 0 0 0",margin:0, borderTop: "34px solid red",WebkitOverflowScrolling: "touch"}}>
-        <div style={{width: labelWidth + hourWidth * 24, height: resourceHeight * resources.length + labelHeight, position: 'relative', margin:0,padding:0}}>
+      <div ref="wrapper" style={{position: 'absolute',top:"5vh",left:"5vw", width:'90vw', height: '90vh', overflow: "auto", padding:0 ,margin:0, borderTop: "34px solid transparent",WebkitOverflowScrolling: "touch"}}>
+        <div style={{width: labelWidth + hourWidth * 24, height: resourceHeight * resources.length + labelHeight, position: 'relative', margin:0,padding:0,backgroundColor: 'white'}}>
           <div style={{width: hourWidth * 24, height: resourceHeight, zIndex:1,left:labelWidth,top:0,position: '-webkit-sticky',position: 'sticky'}}>
             { Array(24).fill(0).map((x, i) => (
-              <div style={{backgroundColor: '#cbe86b', borderRight: "1px dashed #B7D675", padding: "2px", width:hourWidth, height: resourceHeight, left:hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
+              <div style={{backgroundColor: '#ECECEB', borderRight: "1px dashed #ddd", borderBottom: "1px solid #888", padding: "2px", width:hourWidth, height: resourceHeight, left:hourWidth*i,top:0,position:'absolute'}} key={`hour-${i}`}>{i}:00</div>
             )) }
           </div>
           <div style={{width: labelWidth, height: resourceHeight * resources.length, left: 0, top:0,zIndex:2,position: '-webkit-sticky',  position: 'sticky'}}>
             { resources.map((resource, resourceIndex) => (
-              <div style={{width:labelWidth, height: resourceHeight, left:0,top:resourceIndex*resourceHeight,position:'absolute',borderBottom:"1px solid #eee",borderRight:"1px solid #eee",backgroundColor:'white'}} key={`label-${resource.calendarId}`}>{resource.name}</div>
+              <div style={{width:labelWidth, height: resourceHeight, left:0,top:resourceIndex*resourceHeight,position:'absolute',borderBottom:"1px solid #ddd",borderRight:"1px solid #888",backgroundColor:'#ECECEB'}} key={`label-${resource.calendarId}`}>{resource.name}</div>
             )) }
           </div>
           { Array(resources.length+1).fill(0).map((x, i) => (
-            <div style={{borderBottom: '1px solid #eee', width:hourWidth*24+labelWidth, height: 1, left:0,top:i*resourceHeight+resourceHeight-1,position:'absolute'}} key={`resourcec-line-${i}`}></div>
+            <div style={{borderBottom: '1px solid #ddd', width:hourWidth*24+labelWidth, height: 1, left:0,top:i*resourceHeight+resourceHeight-1,position:'absolute'}} key={`resourcec-line-${i}`}></div>
           ))}
           { Array(24).fill(0).map((x, i) => (
-            <div style={{borderRight: '1px dashed #eee', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i+1)-1,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
+            <div style={{borderRight: '1px dashed #ddd', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i+1)-1,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
           )) }
 
           

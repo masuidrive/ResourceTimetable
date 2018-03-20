@@ -7,6 +7,7 @@ import { Header, Modal, Icon, Button, Container, Menu, Image } from 'semantic-ui
 import SignInContainer from '../containers/SignInContainer'
 import CalendarContainer from '../containers/CalendarContainer'
 import SettingsModalContainer from '../containers/SettingsModalContainer'
+import "../styles.scss"
 
 class Main extends React.Component {
   componentDidMount() {
@@ -21,7 +22,7 @@ class Main extends React.Component {
 
   header() {
     return (
-      <Menu fixed='top' size="tiny" inverted>
+      <Menu fixed='top' size="tiny">{/*inverted*/}
         <Container>
           <Menu.Item as='a' header>
             Meetie.
