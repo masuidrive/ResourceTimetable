@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { saveResourceSettings } from '../store'
-import { Button, Input, Icon } from 'semantic-ui-react'
+import { Button, Input, Icon, Radio } from 'semantic-ui-react'
 import Sortable from 'react-sortablejs'
 
 export default connect(
@@ -40,9 +40,9 @@ export default connect(
 
   const els = settings.map((value) =>
     <div key={value.calendarId} data-id={value.calendarId}>
-      <Icon name="content" color="grey" link={true}/>
+      <Icon name="content" color="grey" link={true} className="handle"/>
       <Input value={ value.name } onChange={ changeName(value.calendarId) } style={{margin: "0.1em 0.5em"}} />
-      <Button content={ value.hidden ? "Hidden" : "Shown" } active={ !value.hidden } toggle={ true } onClick={ toggleVisibility(value.calendarId) }/>
+      <Radio content={ value.hidden ? "Hidden" : "Shown" } checked={ !value.hidden } toggle={ true } onClick={ toggleVisibility(value.calendarId) }/>
     </div>
   )
   
@@ -50,7 +50,7 @@ export default connect(
     return <div>Loading...</div>
   }
   return(
-    <Sortable onChange={(order, sortable, evt) => { onSortEnd(order) }}>
+    <Sortable onChange={(order, sortable, evt) => { onSortEnd(order) }} options={{handle:'.handle'}}>
     {els}
     </Sortable>
   )
