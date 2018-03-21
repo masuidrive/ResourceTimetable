@@ -1,6 +1,6 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { initStore, initialize, showSettingsModal, unauthorize } from '../store'
+import { initStore, initialize, showSettingsModal, unauthorize, prevDate, nextDate } from '../store'
 import withRedux from 'next-redux-wrapper'
 import { Header, Modal, Icon, Button, Container, Menu, Image } from 'semantic-ui-react'
 
@@ -24,9 +24,16 @@ class Main extends React.Component {
     return (
       <Menu fixed='top' size="tiny">{/*inverted*/}
         <Container>
-          <Menu.Item as='a' header>
+          <Menu.Item header style={{paddingRight: 40}}>
             Meetie.
           </Menu.Item>
+
+          <Menu.Item icon="chevron left" onClick={() => this.props.prevDate()} />
+          <Menu.Item>
+            { this.props.date === undefined ? '' : `${this.props.date.getMonth()+1} / ${ this.props.date.getDate() }` }
+          </Menu.Item>
+          <Menu.Item icon="chevron right" onClick={() => this.props.nextDate()} />
+          
         </Container>
         <Menu.Menu position='right'>
           <Menu.Item name='Settings' onClick={() => this.props.showSettingsModal()} />
@@ -64,13 +71,16 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  gapiAuth: state.gapiAuth
+  gapiAuth: state.gapiAuth,
+  date: state.date
 })
 
 const mapDispatchToProps = (dispatch) => ({
   initialize: bindActionCreators(initialize, dispatch),
   showSettingsModal: bindActionCreators(showSettingsModal, dispatch),
   unauthorize: bindActionCreators(unauthorize, dispatch),
+  nextDate: bindActionCreators(nextDate, dispatch),
+  prevDate: bindActionCreators(prevDate, dispatch),
 })
 
 export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(Main)

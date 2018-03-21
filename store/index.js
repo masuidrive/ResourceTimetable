@@ -1,18 +1,23 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
-import makeAsyncScriptLoader from "react-async-script";
-import { calendar } from '../externals/calendar';
+import makeAsyncScriptLoader from "react-async-script"
+import { calendar } from '../externals/calendar'
+import moment from 'moment-timezone'
 
-const initialState = {
+const initialState = () => ({
   resources: undefined,
   resourceSettings: [],
   resourcesStatus: 'unloaded',
   gapiAuth: 'initializing',
-  shownSettingsModal: false
-}
+  shownSettingsModal: false,
+  date: new Date(),
+})
 
 export const actionTypes = {
+  NEXT_DATE: 'NEXT_DATE',
+  PREV_DATE: 'PREV_DATE',
+
   SHOW_SETTINGS_MODAL: 'SHOW_SETTINGS_MODAL',
   HIDE_SETTINGS_MODAL: 'HIDE_SETTINGS_MODAL',
 
@@ -32,6 +37,10 @@ export const actionTypes = {
 // REDUCERS
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case actionTypes.NEXT_DATE:
+      return Object.assign({}, state, { date: moment(state.date).add(1, 'day').toDate() })
+    case actionTypes.PREV_DATE:
+      return Object.assign({}, state, { date: moment(state.date).subtract(1, 'day').toDate() })
     case actionTypes.SHOW_SETTINGS_MODAL:
       return Object.assign({}, state, { shownSettingsModal: true })
     case actionTypes.HIDE_SETTINGS_MODAL:
@@ -93,9 +102,9 @@ const updateSettings = (resources, settings) => {
 export const showSettingsModal = () => ({ type: actionTypes.SHOW_SETTINGS_MODAL })
 export const hideSettingsModal = () => ({ type: actionTypes.HIDE_SETTINGS_MODAL })
 
-export const loadResources = () => dispatch => {
+export const loadResources = () => (dispatch, getState) => {
   dispatch({ type: actionTypes.LOADING_RESOURCES })
-  calendar.loadEvents(new Date()).then((resources) => {
+  calendar.loadEvents(getState().date).then((resources) => {
     dispatch({ type: actionTypes.LOAD_RESOURCES, resources: resources })
   })
 }
@@ -125,6 +134,16 @@ export const unauthorize = () => dispatch => {
 }
 
 export const unauthorized = () => ({ type: actionTypes.UNAUTHORIZED })
+
+export const nextDate = (date) => (dispatch, getState) => {
+  dispatch({ type: actionTypes.NEXT_DATE })
+  dispatch(loadResources())
+}
+
+export const prevDate = (date) => (dispatch, getState) => {
+  dispatch({ type: actionTypes.PREV_DATE })
+  dispatch(loadResources())
+}
 
 // Initialize GAPI
 export const initialize = () => dispatch => {
@@ -162,6 +181,6 @@ export const initialize = () => dispatch => {
   });
 }
 
-export const initStore = (initialState = initialState) => {
-  return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunkMiddleware)))
+export const initStore = () => {
+  return createStore(reducer, initialState(), composeWithDevTools(applyMiddleware(thunkMiddleware)))
 }

@@ -58,10 +58,10 @@ export default class TimeTable extends React.Component {
 
   render() {
     const { hourWidth, resourceHeight, labelWidth, labelHeight, headerHeight } = this.props
-    const resources = applySettingsToResources(this.props.resources, this.props.settings)
+    const resources = applySettingsToResources(this.props.resources || [], this.props.settings || [])
     return (
       <div>
-        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:"0vw", marginTop: '0vh', top:headerHeight, position: 'absolute', display: 'block', backgroundColor: '#ECECEB',borderRight: "1px solid #888", borderBottom: "1px solid #888"}}>&lt; 3/15 &gt;</div>
+        <div style={{width: labelWidth, height: resourceHeight, zIndex:4, left:"0vw", marginTop: '0vh', top:headerHeight, position: 'absolute', display: 'block', backgroundColor: '#ECECEB',borderRight: "1px solid #888", borderBottom: "1px solid #888"}}></div>
 
       <div ref="wrapper" style={{position: 'absolute',top:"0vh",left:"0vw", width:'100vw', height: '100vh', overflow: "auto", padding:0 ,margin:0, borderTop: `${headerHeight}px solid transparent`,WebkitOverflowScrolling: "touch"}}>
         <div style={{width: labelWidth + hourWidth * 24, height: resourceHeight * resources.length + labelHeight, position: 'relative', margin:0,padding:0,backgroundColor: 'white'}}>
@@ -82,8 +82,7 @@ export default class TimeTable extends React.Component {
           { Array(24).fill(0).map((x, i) => (
             <div style={{borderRight: '1px dashed #ddd', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i+1)-1,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
           )) }
-
-          
+          { this.props.resources === undefined ? <div>Loading...</div> : undefined}
           { resources.map((resource, resourceIndex) => (
             resource.events.map((event) => {
               const start = moment(event.start).hour() * 60 + moment(event.start).minute()

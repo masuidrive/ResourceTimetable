@@ -17,9 +17,6 @@ export default connect(
   (dispatch) => ({ // mapDispatchToProps
   })
 )(({resources, settings, unauthorize}) => {
-  if(resources === undefined || settings === undefined) {
-    return (<div>waiting...</div>)
-  }
   return (
     <div style={{overflow:"hidden"}}>
       <Timetable resources={resources} settings={settings}/>
