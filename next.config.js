@@ -6,6 +6,6 @@ module.exports = withSass({
   assetPrefix: isProduction ? `${process.env.DEPLOY_PREFIX}` : '',
   exportPathMap: () => ({
     '/': { page: '/' },
-    '/settings': { page: '/settings' },
+    // '/settings': { page: '/settings' },
   })
 })

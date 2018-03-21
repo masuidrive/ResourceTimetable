@@ -9,9 +9,10 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
+          <meta name="viewport" content="width=device-width"/>
           <title>Google Calendar Resources</title>
           <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"></link>
-          <link rel="stylesheet" href="./_next/static/style.css" />
+          <link rel="stylesheet" href={`${process.env.DEPLOY_PREFIX || ''}/_next/static/style.css`} />
         </Head>
         <body>
           <Main />
