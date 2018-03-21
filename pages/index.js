@@ -1,6 +1,6 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
-import { initStore, initialize, showSettingsModal, unauthorize, prevDate, nextDate } from '../store'
+import { initStore, initialize, showSettingsModal, prevDate, nextDate } from '../store'
 import withRedux from 'next-redux-wrapper'
 import { Header, Modal, Icon, Button, Container, Menu, Image } from 'semantic-ui-react'
 
@@ -37,7 +37,6 @@ class Main extends React.Component {
         </Container>
         <Menu.Menu position='right'>
           <Menu.Item name='Settings' onClick={() => this.props.showSettingsModal()} />
-          <Menu.Item name='Logout' onClick={() => this.props.unauthorize()} />
         </Menu.Menu>
       </Menu>
     )
@@ -78,7 +77,6 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) => ({
   initialize: bindActionCreators(initialize, dispatch),
   showSettingsModal: bindActionCreators(showSettingsModal, dispatch),
-  unauthorize: bindActionCreators(unauthorize, dispatch),
   nextDate: bindActionCreators(nextDate, dispatch),
   prevDate: bindActionCreators(prevDate, dispatch),
 })

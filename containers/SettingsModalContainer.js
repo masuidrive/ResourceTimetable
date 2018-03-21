@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { Button, Header, Icon, Modal } from 'semantic-ui-react'
 
-import { hideSettingsModal, resetResourceSettings } from '../store'
+import { hideSettingsModal, resetResourceSettings, unauthorize } from '../store'
 import SettingsContainer from '../containers/SettingsContainer'
 
 export default connect(
@@ -13,6 +13,7 @@ export default connect(
   (dispatch) => ({ // mapDispatchToProps
     resetResourceSettings: bindActionCreators(resetResourceSettings, dispatch),
     hideSettingsModal: bindActionCreators(hideSettingsModal, dispatch),
+    unauthorize: bindActionCreators(unauthorize, dispatch),
   })
 )(({shownSettingsModal, hideSettingsModal, resetResourceSettings}) => {
   if(!shownSettingsModal) { return <div></div> }
@@ -24,7 +25,8 @@ export default connect(
         <SettingsContainer />
       </Modal.Content>
       <Modal.Actions>
-        <Button onClick={() => resetResourceSettings()}>All reset</Button>
+      <Button onClick={() => unauthorize()}>Sign out</Button>
+      <Button onClick={() => resetResourceSettings()}>All reset</Button>
         <Button primary onClick={() => hideSettingsModal()}>
           <Icon name='checkmark' /> Close
         </Button>
