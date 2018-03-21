@@ -1,0 +1,1 @@
+{"version":3,"sources":["/usr/src/app/styles.scss"],"names":[],"mappings":"AAAA;EACE,kBAAkB,EAAE;;AAEtB;EACE,iBAAiB;EACjB,yBAAyB,EAAE","file":"static/style.css","sourcesContent":["body {\n  background: white; }\n\n.sticky {\n  position: sticky;\n  position: -webkit-sticky; }\n\n\n\n// WEBPACK FOOTER //\n// ./styles.scss"],"sourceRoot":""}
