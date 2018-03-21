@@ -24,7 +24,7 @@ class Main extends React.Component {
     return (
       <Menu fixed='top' size="tiny">{/*inverted*/}
         <Container>
-          <Menu.Item header style={{paddingRight: 40}}>
+          <Menu.Item header>
             Meetie.
           </Menu.Item>
 
