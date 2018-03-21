@@ -80,7 +80,7 @@ export default class TimeTable extends React.Component {
             <div style={{borderBottom: '1px solid #ddd', width:hourWidth*24+labelWidth, height: 1, left:0,top:i*resourceHeight+resourceHeight-1,position:'absolute'}} key={`resourcec-line-${i}`}></div>
           ))}          
           { Array(24).fill(0).map((x, i) => (
-            <div style={{borderRight: '1px dashed #ddd', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i+1)-1,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
+            <div style={{borderRight: '1px dashed #ddd', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i)-1+labelWidth,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
           )) }
           { this.props.resources === undefined ? <div>Loading...</div> : undefined}
           { resources.map((resource, resourceIndex) => (
