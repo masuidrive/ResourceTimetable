@@ -44,7 +44,7 @@ export default class TimeTable extends React.Component {
     hourWidth: 160,
     resourceHeight: 40,
     labelHeight: 40,
-    labelWidth: 160,
+    labelWidth: 120,
     headerHeight: 34,
     settings: {}
   }
