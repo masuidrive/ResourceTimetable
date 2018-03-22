@@ -6,18 +6,14 @@ export class Calendar {
   loadResources() {
     const gapi = window.gapi;
     return new Promise((resolve, reject) => {
-      gapi.client.calendar.calendarList.list().then(
+      gapi.client.directory.resources.calendars.list({customer: 'my_customer'}).then(
         (response) => {
           var result = []
-          for(let cal of response.result.items) {
-            // check resource or regular calendar
-            if(String(cal.id).match(/@resource\.calendar\.google\.com$/)) {
-              result.push({
-                calendarId: cal.id,
-                timeZone: cal.timeZone,
-                name: cal.summary
-              })
-            }
+          for(let res of response.result.items) {
+            result.push({
+              calendarId: res.resourceEmail,
+              name: res.resourceName,
+            })
           }
           resolve(result)
         },
@@ -48,8 +44,8 @@ export class Calendar {
 
         if(active && typeof item.start.dateTime == "string") {
           // 時間枠に入るなら
-          const start = moment(item.start.dateTime).tz(command.resource.timeZone)
-          const end = moment(item.end.dateTime).tz(command.resource.timeZone)
+          const start = moment(item.start.dateTime)
+          const end = moment(item.end.dateTime)
           if(date.startOf('day') <= end && start <= date.endOf('day')) {
             resource.events.push({
               id: item.id,

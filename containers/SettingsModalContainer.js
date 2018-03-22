@@ -15,7 +15,7 @@ export default connect(
     hideSettingsModal: bindActionCreators(hideSettingsModal, dispatch),
     unauthorize: bindActionCreators(unauthorize, dispatch),
   })
-)(({shownSettingsModal, hideSettingsModal, resetResourceSettings}) => {
+)(({shownSettingsModal, hideSettingsModal, resetResourceSettings, unauthorize}) => {
   if(!shownSettingsModal) { return <div></div> }
 
   return <div>

@@ -161,8 +161,8 @@ export const initialize = () => dispatch => {
   }
 
   gapi.load('client:auth2', () => {
-    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-    const SCOPES = "https://www.googleapis.com/auth/calendar";
+    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest", "https://www.googleapis.com/discovery/v1/apis/admin/directory_v1/rest"];
+    const SCOPES = "https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly";
 
     gapi.client.init({
       apiKey: GOOGLE_API_KEY,
