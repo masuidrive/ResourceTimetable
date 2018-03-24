@@ -25,7 +25,7 @@ export default connect(
         <SettingsContainer />
       </Modal.Content>
       <Modal.Actions>
-      <Button onClick={() => unauthorize()}>Sign out</Button>
+      <Button onClick={() => { hideSettingsModal(); unauthorize() }}>Sign out</Button>
       <Button onClick={() => resetResourceSettings()}>All reset</Button>
         <Button primary onClick={() => hideSettingsModal()}>
           <Icon name='checkmark' /> Close

@@ -48,6 +48,7 @@ class Main extends React.Component {
     }
 
     var main = undefined;
+    console.log(`gapiAuth: ${this.props.gapiAuth}`)
     switch (this.props.gapiAuth) {
       case 'unauthorized':
       case 'authorizing':
@@ -56,6 +57,7 @@ class Main extends React.Component {
       case 'authorized':
         main = <div>
           <CalendarContainer />
+          <SettingsModalContainer/>
         </div>
         break
       default:
@@ -64,7 +66,6 @@ class Main extends React.Component {
     return <div>
       { this.header() }
       { main }
-      <SettingsModalContainer/>
     </div>
   }
 }

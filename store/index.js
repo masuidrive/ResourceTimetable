@@ -151,6 +151,7 @@ export const initialize = () => dispatch => {
   dispatch(saveResourceSettings(JSON.parse(window.localStorage["resourceSettings"] || "[]")))
 
   const updateAuthState = (isSignedIn) => {
+    console.log(`uas: ${isSignedIn}`)
     if(isSignedIn) {
       dispatch(authorized())
       dispatch(loadResources())
@@ -172,7 +173,8 @@ export const initialize = () => dispatch => {
     }).then(
       () => {
         gapi.auth2.getAuthInstance().isSignedIn.listen(updateAuthState)
-        updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get());
+        updateAuthState(gapi.auth2.getAuthInstance().isSignedIn.get())
+        console.log(`i1: ${gapi.auth2.getAuthInstance().isSignedIn.get()}`)
       },
       () => {
         console.log("auth error")      
