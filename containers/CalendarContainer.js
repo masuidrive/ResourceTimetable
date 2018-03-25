@@ -12,14 +12,15 @@ const headerHeight = 50
 export default connect(
   (state) => ({ // mapStateToPropsContainer
     resources: state.resources,
-    settings: state.resourceSettings
+    settings: state.resourceSettings,
+    date: state.date,
   }),
   (dispatch) => ({ // mapDispatchToProps
   })
-)(({resources, settings, unauthorize}) => {
+)(({resources, settings, unauthorize, date}) => {
   return (
     <div style={{overflow:"hidden"}}>
-      <Timetable resources={resources} settings={settings}/>
+      <Timetable resources={resources} settings={settings} date={date}/>
     </div>
   )
 });

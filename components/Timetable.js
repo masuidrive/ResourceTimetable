@@ -57,7 +57,14 @@ export default class TimeTable extends React.Component {
   }
 
   render() {
-    const { hourWidth, resourceHeight, labelWidth, labelHeight, headerHeight } = this.props
+    const { hourWidth, resourceHeight, labelWidth, labelHeight, headerHeight, date } = this.props
+    const now = moment(), date_ = moment(date)
+    var nowPos = undefined
+    if(date_.isSame(now, 'day')) {
+      nowPos = hourWidth*(date_.hours() + date_.minutes() / 60.0)+labelWidth
+      console.log(nowPos)
+    }
+
     const resources = applySettingsToResources(this.props.resources || [], this.props.settings || [])
     return (
       <div>
@@ -82,6 +89,10 @@ export default class TimeTable extends React.Component {
           { Array(24).fill(0).map((x, i) => (
             <div style={{borderRight: '1px dashed #ddd', width:1, height: resourceHeight*(resources.length+1), left:hourWidth*(i)-1+labelWidth,top:0,position:'absolute'}} key={`hour-k-${i}`}></div>
           )) }
+          {
+            nowPos === undefined ? undefined :
+            <div style={{borderRight: '1px solid red', width:1, height: resourceHeight*(resources.length+1), left:nowPos,top:0,position:'absolute'}} key={`hour-now`}></div>
+          }
           { this.props.resources === undefined ? <div>Loading...</div> : undefined}
           { resources.map((resource, resourceIndex) => (
             resource.events.map((event) => {
